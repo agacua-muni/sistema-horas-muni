@@ -1,0 +1,22 @@
+/* Archivo: core/static/css/fix_import.css */
+
+/* 1. Eliminar el fondo negro de los textos nuevos (etiqueta <ins>) */
+ins, 
+.import-preview ins, 
+.import-preview span {
+    background-color: transparent !important; /* Fondo transparente */
+    color: #000000 !important; /* Texto negro */
+    text-decoration: none !important; /* Quitar subrayado */
+    border: none !important;
+}
+
+/* 2. Asegurar que las celdas sean blancas */
+.import-preview td {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* 3. Asegurar que las filas sean blancas */
+.import-preview tr {
+    background-color: #ffffff !important;
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* =========================================
+           DEFINICIÓN DE PÁGINAS
+           ========================================= */
+        
+        /* HOJA 1: NOTA FORMAL (CORREGIDA) */
+        @page nota_page {
+            size: A4;
+            /* Márgenes físicos de la hoja para que no se desborde */
+            margin-top: 3cm;
+            margin-bottom: 3cm;
+            margin-left: 3cm;
+            margin-right: 3cm;
+        }
+
+        /* HOJA 2+: REPORTE (INTACTO, COMO PEDISTE) */
+        @page reporte_page {
+            size: A4;
+            margin-left: 1cm;
+            margin-right: 1cm;
+            margin-bottom: 2cm;
+            margin-top: 5.5cm; 
+            
+            @frame header_frame {
+                -pdf-frame-content: headerContent;
+                top: 1cm;
+                left: 1cm;
+                width: 19cm;
+                height: 4.5cm;
+            }
+            
+            @frame footer_frame {
+                -pdf-frame-content: footerContent;
+                bottom: 0.5cm;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                height: 1cm;
+            }
+        }
+        
+        /* FUENTES */
+        body { font-family: Helvetica, sans-serif; font-size: 11pt; line-height: 1.4; }
+        
+        /* === ESTILOS NOTA (Hoja 1 - CORREGIDOS) === */
+        /* Alineamos Bloque Superior a la derecha */
+        .bloque-superior { text-align: right; margin-bottom: 40px; }
+        .nota-ref { font-weight: bold; font-size: 10pt; margin-bottom: 10px; }
+        .nota-fecha { font-size: 11pt; }
+        
+        .nota-destinatario { font-weight: bold; margin-bottom: 40px; line-height: 1.4; text-align: left; text-transform: uppercase; }
+        
+        .nota-intro { margin-bottom: 15px; text-align: left; }
+        
+        /* Texto justificado */
+        .nota-cuerpo { text-align: justify; margin-bottom: 20px; line-height: 1.5; }
+        .nota-saludo { text-align: justify; margin-top: 40px; line-height: 1.5; }
+        
+        /* Firma centrada pero controlada para que no salte de hoja */
+        .nota-firma { text-align: center; margin-top: 60px; font-size: 10pt; }
+
+        /* === ESTILOS REPORTE (INTACTOS) === */
+        .tbl-header { width: 100%; border: none; }
+        .tbl-header td { border: none; vertical-align: middle; }
+        
+        .titulo-main { font-size: 15pt; font-weight: bold; text-align: center; text-transform: uppercase; }
+        .titulo-sub { font-size: 11pt; font-weight: bold; text-align: center; margin-top: 5px; }
+        
+        .box-datos {
+            border-top: 2px solid #000;
+            border-bottom: 1px solid #000;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-top: 10px;
+        }
+        .info-label { font-weight: bold; font-size: 9pt; }
+        .info-text { font-size: 9pt; }
+
+        .tbl-datos { width: 100%; border-collapse: collapse; margin-top: 0px; }
+        .tbl-datos th { 
+            background-color: #f0f0f0; 
+            border: 1px solid #000; 
+            padding: 5px; 
+            font-size: 9pt; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        .tbl-datos td { 
+            border: 1px solid #000; 
+            padding: 4px; 
+            font-size: 9pt; 
+            vertical-align: middle; 
+        }
+        .col-horas { text-align: center; font-weight: bold; }
+        .col-imputacion { text-align: center; font-size: 8pt; }
+        .dni-span { font-size: 8pt; color: #333; margin-left: 5px; }
+        
+        .total-gral { margin-top: 10px; text-align: right; font-size: 12pt; font-weight: bold; border-top: 2px solid #000; padding-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="bloque-superior">
+        <div class="nota-ref">
+            Ref.: Elevación de hs extras a liquidar<br>
+            de contratados de locación
+        </div>
+        <div class="nota-fecha">
+            Chajarí, {{ fecha_hoy|date:"d \d\e F \d\e Y" }}
+        </div>
+    </div>
+
+    <div class="nota-destinatario">
+        A la<br>
+        {{ destinatario_nombre }}<br>
+        {{ destinatario_cargo }}<br>
+        del Gobierno de la Ciudad de Chajarí<br>
+        S / D
+    </div>
+
+    <div class="nota-intro">
+        De mi mayor consideración:
+    </div>
+
+    <div class="nota-cuerpo">
+        Tengo el agrado de dirigirme a Ud. a los efectos de enviarle en archivo adjunto el listado de horas adicionales realizadas por los contratados de locación.
+    </div>
+
+    <div class="nota-cuerpo">
+        Dichas horas fueron realizadas en el período <strong>{{ periodo.nombre }}</strong>, el cual está comprendido entre el {{ periodo.fecha_inicio|date:"d \d\e F \d\e Y" }} al {{ periodo.fecha_fin|date:"d \d\e F \d\e Y" }}.
+    </div>
+
+    <div class="nota-saludo">
+        Sin otro particular, y quedando a vuestra entera disposición, saludo a Ud. muy atentamente.
+    </div>
+
+    <div class="nota-firma">
+        <br><br>
+        ______________________________________<br>
+        Recursos Humanos<br>
+        Gobierno de la Ciudad de Chajarí
+    </div>
+
+    <pdf:nexttemplate name="reporte_page" />
+    <pdf:nextpage />
+
+    <div id="headerContent">
+        <table class="tbl-header">
+            <tr>
+                <td style="width: 25%; vertical-align: top;">
+                    <img src="img/logo_chico.png" style="width: 140px; height: auto;">
+                </td>
+                <td style="width: 75%; text-align: center; vertical-align: middle;">
+                    <div class="titulo-main">REPORTE DE HS ADICIONALES</div>
+                    <div class="titulo-sub">CONTRATADOS DE LOCACIÓN</div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="box-datos">
+            <table class="tbl-header">
+                <tr>
+                    <td style="width: 65%; text-align: left;">
+                        <span class="info-label">PERÍODO:</span> <span class="info-text">{{ periodo.nombre }}</span><br>
+                        <span class="info-label">FECHAS:</span> <span class="info-text">Del {{ periodo.fecha_inicio|date:"d/m/Y" }} al {{ periodo.fecha_fin|date:"d/m/Y" }}</span>
+                    </td>
+                    <td style="width: 35%; text-align: right; vertical-align: bottom;">
+                        <span class="info-label">FECHA REPORTE:</span> <span class="info-text">{{ fecha_hoy|date:"d/m/Y" }}</span><br>
+                        <span class="info-label" style="font-size: 11pt;">Hoja <pdf:pagenumber /></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <table class="tbl-datos">
+        <thead>
+            <tr>
+                <th style="width: 50%;">APELLIDO, NOMBRE Y DNI</th>
+                <th style="width: 35%;">IMPUTACIÓN</th>
+                <th style="width: 15%;">CANTIDAD HS</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in datos %}
+            <tr>
+                <td style="text-align: left;">
+                    <strong>{{ fila.nombre_completo }}</strong><br>
+                    <span class="dni-span">D.N.I.: {{ fila.dni }}</span>
+                </td>
+                <td class="col-imputacion">{{ fila.imputacion }}</td>
+                <td class="col-horas">{{ fila.total_horas }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="total-gral">
+        TOTAL GENERAL: {{ total_general }}
+    </div>
+
+    <div id="footerContent"></div>
+
+</body>
+</html>

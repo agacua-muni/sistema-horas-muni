@@ -1,0 +1,51 @@
+{% extends "admin/import_export/import.html" %}
+
+{% block content %}
+    <style>
+        /* Forzar tabla blanca y limpia */
+        .import-preview, 
+        .import-preview table {
+            background-color: #ffffff !important;
+            width: 100%;
+        }
+        .import-preview th {
+            background-color: #f0f0f0 !important;
+            color: #000 !important;
+            border-bottom: 2px solid #000;
+            padding: 10px;
+        }
+        .import-preview td {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+        /* Ocultar botones o elementos raros si quedan */
+        .import-preview ins, .import-preview span {
+            text-decoration: none !important;
+            border: none !important;
+        }
+    </style>
+
+    {{ block.super }}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Esperamos un instante para que la tabla se dibuje
+            setTimeout(function() {
+                var celdas = document.querySelectorAll('.import-preview td');
+                
+                celdas.forEach(function(celda) {
+                    // TRUCO: Reemplazamos el contenido HTML por solo Texto Plano
+                    // Esto elimina las etiquetas <ins> que causan el fondo negro
+                    var textoLimpio = celda.textContent || celda.innerText;
+                    celda.innerHTML = textoLimpio.trim();
+                    
+                    // Aseguramos el color negro
+                    celda.style.color = "black";
+                    celda.style.backgroundColor = "white";
+                });
+            }, 100);
+        });
+    </script>
+{% endblock %}

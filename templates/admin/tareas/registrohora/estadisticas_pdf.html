@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+            @frame footer_frame {
+                -pdf-frame-content: footerContent;
+                bottom: 1cm;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                height: 1cm;
+            }
+        }
+        body { font-family: Helvetica, sans-serif; text-align: center; }
+        
+        .header { margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .titulo { font-size: 16pt; font-weight: bold; color: #333; }
+        .subtitulo { font-size: 11pt; color: #666; margin-top: 5px; }
+        
+        .seccion-grafico { margin-top: 10px; margin-bottom: 20px; }
+        .titulo-grafico { 
+            font-size: 12pt; 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            color: #444; 
+            text-align: left; 
+            border-left: 5px solid #007bff; 
+            padding-left: 10px; 
+            background-color: #f8f9fa;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        
+        /* IMÁGENES MÁS ACHATADAS */
+        .img-grafico { 
+            width: 100%; 
+            height: auto; 
+            border: 1px solid #ddd; 
+            padding: 2px; 
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* TABLAS DE REFERENCIA */
+        .tabla-ref {
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin-top: 5px;
+        }
+        .tabla-ref th {
+            background-color: #e9ecef;
+            border: 1px solid #999;
+            padding: 4px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .tabla-ref td {
+            border: 1px solid #999;
+            padding: 4px;
+            text-align: center;
+        }
+        .color-box {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            border: 1px solid #000;
+            margin-right: 5px;
+        }
+        
+        .page-break { page-break-before: always; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="titulo">REPORTE ESTADÍSTICO DE HORAS</div>
+        <div class="subtitulo">Análisis Semestral y Distribución por Secretaría</div>
+        <div style="font-size: 9pt; margin-top: 5px; text-align: right;">Generado: {{ fecha_hoy|date:"d/m/Y" }}</div>
+    </div>
+
+    <div class="seccion-grafico">
+        <div class="titulo-grafico">Evolución Semestral (Últimos 6 Períodos)</div>
+        
+        <img src="data:image/png;base64,{{ grafico_barras }}" class="img-grafico">
+
+        <div style="text-align: center; font-size: 10pt; font-weight: bold; margin-top: 10px;">Detalle de Horas por Mes</div>
+        <table class="tabla-ref">
+            <thead>
+                <tr>
+                    <th>PERÍODO</th>
+                    <th>TOTAL HORAS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in datos_barras %}
+                <tr>
+                    <td style="text-align: left;">{{ item.periodo }}</td>
+                    <td>{{ item.horas }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="header">
+        <div class="titulo">DISTRIBUCIÓN POR ÁREA</div>
+        <div class="subtitulo">Período: {{ periodo_actual }}</div>
+    </div>
+
+    <div class="seccion-grafico">
+        <div class="titulo-grafico">Porcentaje de Horas por Secretaría</div>
+        
+        <img src="data:image/png;base64,{{ grafico_torta }}" class="img-grafico">
+
+        <div style="text-align: center; font-size: 10pt; font-weight: bold; margin-top: 10px;">Detalle de Distribución</div>
+        <table class="tabla-ref">
+            <thead>
+                <tr>
+                    <th>SECRETARÍA</th>
+                    <th>HORAS</th>
+                    <th>PORCENTAJE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in datos_torta %}
+                <tr>
+                    <td style="text-align: left;">
+                        <span class="color-box" style="background-color: {{ item.color }};"></span>
+                        {{ item.label }}
+                    </td>
+                    <td>{{ item.value }}</td>
+                    <td>{{ item.porcentaje }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="footerContent" style="text-align: right; font-size: 8pt; color: #999;">
+        Sistema de Gestión Municipal - Página <pdf:pagenumber>
+    </div>
+
+</body>
+</html>

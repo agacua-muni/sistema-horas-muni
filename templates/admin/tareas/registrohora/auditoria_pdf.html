@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape; /* Hoja Apaisada */
+            margin: 1.5cm;
+            @frame footer_frame {
+                -pdf-frame-content: footerContent;
+                bottom: 0.5cm;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                height: 1cm;
+            }
+        }
+        body { font-family: Helvetica, sans-serif; font-size: 10pt; }
+        
+        /* Encabezado con Logo */
+        .tbl-header { width: 100%; border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
+        .tbl-header td { vertical-align: middle; }
+        
+        .titulo { font-size: 16pt; font-weight: bold; color: #333; text-align: right; }
+        .subtitulo { font-size: 10pt; color: #666; margin-top: 5px; text-align: right; }
+        
+        /* Tabla de Auditoría */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        
+        th { 
+            background-color: #333; 
+            color: #fff; 
+            padding: 5px; 
+            font-size: 8pt; 
+            font-weight: bold; 
+            text-align: left;
+            border: 1px solid #333;
+        }
+        
+        td { 
+            border: 1px solid #ccc; 
+            padding: 5px; 
+            font-size: 8pt; 
+            vertical-align: top;
+            color: #333;
+        }
+
+        .badge-creacion { color: #28a745; font-weight: bold; }
+        .badge-edicion { color: #ffc107; font-weight: bold; }
+        .badge-borrado { color: #dc3545; font-weight: bold; }
+
+        .col-fecha { width: 10%; }
+        .col-usuario { width: 10%; }
+        .col-accion { width: 10%; }
+        .col-empleado { width: 25%; }
+        .col-detalle { width: 25%; }
+        .col-valores { width: 10%; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <table class="tbl-header">
+        <tr>
+            <td style="width: 20%;">
+                <img src="img/logo_chico.png" style="width: 120px; height: auto;">
+            </td>
+            <td style="width: 80%;">
+                <div class="titulo">REPORTE DE AUDITORÍA - CONTROL DE CAMBIOS</div>
+                <div class="subtitulo">
+                    Generado el: {{ fecha_hoy|date:"d/m/Y H:i" }} | Usuario: {{ usuario_solicitante }}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-fecha">FECHA/HORA</th>
+                <th class="col-usuario">USUARIO</th>
+                <th class="col-accion">ACCIÓN</th>
+                <th class="col-empleado">EMPLEADO</th>
+                <th class="col-detalle">DETALLE DEL CAMBIO</th>
+                <th class="col-valores">VALOR ANT.</th>
+                <th class="col-valores">VALOR NUE.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.fecha }}<br>{{ log.hora }}</td>
+                <td>{{ log.usuario }}</td>
+                <td>
+                    {% if "CREACIÓN" in log.accion %}
+                        <span class="badge-creacion">● ALTA</span>
+                    {% elif "EDICIÓN" in log.accion %}
+                        <span class="badge-edicion">● EDICIÓN</span>
+                    {% elif "ELIMINADO" in log.accion %}
+                        <span class="badge-borrado">● BAJA</span>
+                    {% endif %}
+                </td>
+                <td><strong>{{ log.empleado }}</strong></td>
+                <td>{{ log.detalle }}</td>
+                <td style="text-align: center; background-color: #fce8e6;">{{ log.valor_ant }}</td>
+                <td style="text-align: center; background-color: #e6fcf5;"><strong>{{ log.valor_nue }}</strong></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 20px;">
+                    <strong>No se encontraron registros con modificaciones o eliminaciones en la selección actual.</strong>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="footerContent" style="text-align: right; font-size: 8pt; color: #999;">
+        Documento de Control Interno - Página <pdf:pagenumber>
+    </div>
+
+</body>
+</html>
