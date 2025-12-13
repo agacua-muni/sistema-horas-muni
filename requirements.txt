@@ -13,6 +13,7 @@ Django==5.2.9
 django-import-export==4.3.14
 django-jazzmin==3.0.1
 django-modeladmin-reorder==0.3.1
+django-simple-history==3.11.0
 et_xmlfile==2.0.0
 fonttools==4.61.1
 freetype-py==2.5.1
