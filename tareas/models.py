@@ -58,7 +58,9 @@ class Empleado(models.Model):
         verbose_name_plural = "Empleados"
 
     def __str__(self):
-        return f"{self.apellido}, {self.nombre}"
+        # Si tiene departamento, lo mostramos entre corchetes. Si no, mostramos solo el nombre.
+        dpto = self.departamento.nombre if self.departamento else "Sin Dpto"
+        return f"{self.apellido}, {self.nombre} [{dpto}]"
 
 # ========================================================
 # 4. PERÍODOS

@@ -5,4 +5,7 @@ __pycache__/
 db.sqlite3
 .DS_Store
 backups/
-media/
+media/"__pycache__/" 
+"*.pyc" 
+"db.sqlite3" 
+"venv/" 

@@ -6,7 +6,7 @@
 .import-preview td, 
 .import-preview th {
     background-color: #ffffff !important;
-    color: #e91717 !important;
+    color: #333333 !important;
     border: 1px solid #dddddd !important;
 }
 
@@ -18,7 +18,7 @@
 /* Encabezados de la tabla */
 .import-preview thead th {
     background-color: #f8f9fa !important; /* Gris muy claro */
-    color: #000000 !important;
+    color: #fcf5f5 !important;
     font-weight: bold;
 }
 

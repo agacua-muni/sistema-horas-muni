@@ -1,0 +1,52 @@
+{% extends "admin/change_list.html" %}
+{% load i18n static %}
+
+{# BLOQUE 1: BOTONES (Manuales pero seguros) #}
+{% block object-tools-items %}
+    
+    {# Botón Importar #}
+    {% if has_import_permission %}
+    <li>
+        {# Usamos la URL directa que ahora sí funciona #}
+        <a href="{% url 'admin:tareas_registrohora_import' %}" class="btn btn-secondary" style="margin-right: 5px;">
+            <i class="fas fa-file-import"></i> Importar
+        </a>
+    </li>
+    {% endif %}
+
+    {# Botón Exportar #}
+    {% if has_export_permission %}
+    <li>
+        <a href="{% url 'admin:tareas_registrohora_export' %}" class="btn btn-secondary" style="margin-right: 5px;">
+            <i class="fas fa-file-export"></i> Exportar
+        </a>
+    </li>
+    {% endif %}
+
+    {# Esto carga el botón original "Agregar Hora" al final #}
+    {{ block.super }}
+
+{% endblock %}
+
+
+{# BLOQUE 2: CARTEL DEL PERÍODO #}
+{% block result_list %}
+    <div class="col-12" style="margin-bottom: 20px;">
+        {% if periodo_vigente %}
+            <div class="callout callout-success" style="background-color: #28a745; color: white; border-radius: 5px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h4 style="margin: 0; font-weight: bold; text-align: center;">
+                    📅 PERÍODO ACTIVO: {{ periodo_vigente.nombre|upper }}
+                </h4>
+            </div>
+        {% else %}
+            <div class="callout callout-danger" style="background-color: #dc3545; color: white; border-radius: 5px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h4 style="margin: 0; font-weight: bold; text-align: center;">
+                    ⚠️ ATENCIÓN: NO HAY UN PERÍODO VIGENTE
+                </h4>
+            </div>
+        {% endif %}
+    </div>
+
+    {# Lista de datos #}
+    {{ block.super }}
+{% endblock %}
