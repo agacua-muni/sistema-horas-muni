@@ -1,0 +1,34 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        /* 1. FORZAR EL CONTENEDOR DE SCROLL 
+           Apuntamos a varias clases posibles para asegurar que lo agarre. */
+        .results, .table-responsive, #changelist-form .card-body {
+            max-height: 70vh !important; /* Usa el 70% de la altura de la pantalla */
+            overflow-y: auto !important;  /* Fuerza a que aparezca la barra de scroll vertical */
+            display: block !important;    /* Asegura que el contenedor respete el alto */
+            position: relative !important;
+            border-bottom: 2px solid #ccc; /* Una línea abajo para saber dónde termina */
+        }
+
+        /* 2. FIJAR LOS TÍTULOS (TH) */
+        table thead th {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important; /* Un número alto para que flote sobre los datos */
+            background-color: #f1f3f5 !important; /* Gris claro sólido (no transparente) */
+            color: #333 !important; /* Color de letra oscuro */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombrita para dar efecto 3D */
+        }
+        
+        /* 3. Corrección visual para los bordes */
+        table thead th.sorting, 
+        table thead th.sorting_asc, 
+        table thead th.sorting_desc {
+            border-top: none !important;
+        }
+    </style>
+{% endblock %}
